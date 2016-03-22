@@ -1,1 +1,5 @@
 .idea
+*.properties
+out
+*.txt
+*.iml
