@@ -16,5 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.shanlihou.activity.LoginActivity"/>
+        <activity android:name="com.shanlihou.activity.RegisterActivity"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

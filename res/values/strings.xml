@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">schooltao</string>
     <string name="log_in">登陆</string>
+    <string name="regist">注册</string>
+    <string name="school">学校</string>
+    <string name="building_num">楼号</string>
+    <string name="room_num">寝室号</string>
     <string name="cellphone_number">手机号</string>
     <string name="password">密码</string>
 </resources>
