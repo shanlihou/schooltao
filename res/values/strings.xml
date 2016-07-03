@@ -8,4 +8,5 @@
     <string name="room_num">寝室号</string>
     <string name="cellphone_number">手机号</string>
     <string name="password">密码</string>
+    <string name="school_choice">学校选择</string>
 </resources>

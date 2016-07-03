@@ -13,7 +13,7 @@ public class MyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Intent intent = new Intent(MyActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(MyActivity.this, SchoolChoiceActivity.class);
         startActivity(intent);
         this.finish();
     }

@@ -17,6 +17,7 @@
         </activity>
         <activity android:name="com.shanlihou.activity.LoginActivity"/>
         <activity android:name="com.shanlihou.activity.RegisterActivity"/>
+        <activity android:name="com.shanlihou.activity.SchoolChoiceActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

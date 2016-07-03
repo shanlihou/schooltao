@@ -1,12 +1,15 @@
 package com.shanlihou.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import com.shanlihou.schooltao.R;
+import com.shanlihou.tmp.AuthManager;
+import com.shanlihou.tmp.MyButton;
 
 /**
  * Created by shily on 16-4-6.
@@ -45,8 +48,9 @@ public class RegisterActivity extends Activity{
     private void initView(){
         mBtRegist.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                new Thread(mRegistRun).start();
+            public void onClick(View v) {//点击注册事件
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }

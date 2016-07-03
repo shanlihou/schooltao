@@ -2,8 +2,8 @@ package com.shanlihou.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Button;
 import com.shanlihou.schooltao.R;
+import com.shanlihou.tmp.MyButton;
 
 /**
  * Created by Administrator on 2016/3/21 0021.
