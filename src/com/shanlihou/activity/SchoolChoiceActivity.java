@@ -1,9 +1,12 @@
 package com.shanlihou.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.shanlihou.adapter.SchoolListAdapter;
 import com.shanlihou.schooltao.MainApplication;
@@ -19,18 +22,46 @@ import java.util.*;
  * Created by shanlihou on 2016/6/19.
  */
 public class SchoolChoiceActivity extends Activity{
+    Context mContext;
     ListView mSchoolListView;
+    Map<String, Object> mMap;
     SchoolListAdapter mListAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.school_list);
         mSchoolListView = (ListView)findViewById(R.id.school_list);
+        mContext = this;
         List<Map> list = new ArrayList<>();
-        getList(parseJson(text), list, 0);
+        mMap = parseJson(text);
+        getList(mMap, list, 0);
         mListAdapter = new SchoolListAdapter(this, list);
         mSchoolListView.setAdapter(mListAdapter);
+        init();
     }
+    void init(){
+        viewInit();
+    }
+    void viewInit(){
+        mSchoolListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SchoolListAdapter.ViewHolder holder = (SchoolListAdapter.ViewHolder) view.getTag();
+                if (holder.map != null){
+                    if (holder.map.get("close") == null){
+                        holder.map.put("close", 1);
+                    }else{
+                        holder.map.put("close", null);
+                    }
+                    List<Map> list = new ArrayList<Map>();
+                    getList(mMap, list, 0);
+                    mListAdapter = new SchoolListAdapter(mContext, list);
+                    mSchoolListView.setAdapter(mListAdapter);
+                }
+            }
+        });
+    }
+
     private Map<String, Object> parseJson(String jsonStr){
         JSONTokener jsonTokener = new JSONTokener(jsonStr);
         JSONObject jsonRet = null;
@@ -55,12 +86,15 @@ public class SchoolChoiceActivity extends Activity{
                             city.put(school.getString("school_name"), null);
                         }else{
                             city = new HashMap<>();
+                            city.put("close", 1);
                             city.put(school.getString("school_name"), null);
                             province.put(cityStr, city);
                         }
                     }else{
                         province = new HashMap<>();
                         city = new HashMap<>();
+                        province.put("close", 1);
+                        city.put("close", 1);
                         city.put(school.getString("school_name"), null);
                         province.put(school.getString("city"), city);
                         map.put(provinceStr, province);
@@ -73,14 +107,22 @@ public class SchoolChoiceActivity extends Activity{
         return map;
     }
     private void getList(Map<String, Object> map, List<Map> list, int deep){
+        if (map.get("close") != null){
+            return;
+        }
         Set<Map.Entry<String, Object>> set = map.entrySet();
         Iterator<Map.Entry<String, Object>> iter = set.iterator();
         while(iter.hasNext()){
             Map.Entry<String, Object> entry = iter.next();
+            if (entry.getKey() == "close"){
+                continue;
+            }
+
             Map<String, Object> tmpMap = new HashMap<>();
             list.add(tmpMap);
             tmpMap.put("name", entry.getKey().toString());
             tmpMap.put("deep", deep);
+            tmpMap.put("map", entry.getValue());
             Log.d("shanlihou", entry.getKey().toString() + ":" + deep);
             if (entry.getValue() != null){
                 getList((Map<String, Object>)entry.getValue(), list, deep + 1);

@@ -18,6 +18,7 @@
         <activity android:name="com.shanlihou.activity.LoginActivity"/>
         <activity android:name="com.shanlihou.activity.RegisterActivity"/>
         <activity android:name="com.shanlihou.activity.SchoolChoiceActivity"/>
+        <activity android:name="com.shanlihou.activity.ShoppingCarActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
