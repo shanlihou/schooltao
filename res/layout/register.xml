@@ -28,18 +28,24 @@
                   android:layout_marginTop="30px"
                   android:layout_height="wrap_content">
         <EditText style="@style/commonEdit"
+                  android:id="@+id/et_cellphone"
                   android:hint="@string/cellphone_number"/>
         <ImageView style="@style/divideLine"/>
         <EditText style="@style/commonEdit"
+                  android:id="@+id/et_password"
+                  android:password="true"
                   android:hint="@string/password"/>
         <ImageView style="@style/divideLine"/>
-        <EditText style="@style/commonEdit"
-                  android:hint="@string/school"/>
+        <TextView style="@style/commonChoiceText"
+                  android:text="@string/school"
+                  android:id="@+id/tx_school_choice"/>
+        <ImageView style="@style/divideLine"/>
+        <TextView style="@style/commonChoiceText"
+                  android:id="@+id/tx_building_choice"
+                  android:text="@string/building_num"/>
         <ImageView style="@style/divideLine"/>
         <EditText style="@style/commonEdit"
-                  android:hint="@string/building_num"/>
-        <ImageView style="@style/divideLine"/>
-        <EditText style="@style/commonEdit"
+                  android:id="@+id/et_room"
                   android:hint="@string/room_num"/>
     </LinearLayout>
 

@@ -7,11 +7,21 @@
     <style name="commonEdit">
         <item name="android:textColorHint">@color/text_hint</item>
         <item name="android:textSize">26px</item>
+        <item name="android:textColor">@color/common_text</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">96px</item>
         <item name="android:layout_marginLeft">40px</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@null</item>
+        <item name="android:layout_marginRight">40px</item>
+    </style>
+    <style name="commonChoiceText">
+        <item name="android:textSize">26px</item>
+        <item name="android:textColor">@color/text_hint</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">96px</item>
+        <item name="android:layout_marginLeft">40px</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginRight">40px</item>
     </style>
     <style name="divideLine">

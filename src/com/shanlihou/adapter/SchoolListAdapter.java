@@ -3,7 +3,6 @@ package com.shanlihou.adapter;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ public class SchoolListAdapter extends BaseAdapter{
         mList = list;
         Resources resource = (Resources) context.getResources();
         mSchoolTextColor = (ColorStateList) resource.getColorStateList(R.color.school_text);
-        mNotSchoolColor = (ColorStateList) resource.getColorStateList(R.color.province_text);
+        mNotSchoolColor = (ColorStateList) resource.getColorStateList(R.color.common_text);
     }
     @Override
     public int getCount() {
@@ -51,7 +50,7 @@ public class SchoolListAdapter extends BaseAdapter{
         if (convertView == null){
             convertView = mInflater.inflate(R.layout.school_item, null);
             holder = new ViewHolder();
-            holder.textView = (TextView)convertView.findViewById(R.id.shool_item_text);
+            holder.textView = (TextView)convertView.findViewById(R.id.school_item_text);
             holder.linear = (LinearLayout)convertView.findViewById(R.id.school_item_linear);
             convertView.setTag(holder);
         }else{
@@ -60,7 +59,6 @@ public class SchoolListAdapter extends BaseAdapter{
         Map<String, Object> map = mList.get(position);
         holder.textView.setText(map.get("name").toString());
         int deep = ((int)map.get("deep"));
-        Log.d("shanlihou", "view:" + mList.get(position).get("name").toString() + ":" + deep + ":" + position);
         if (deep == 0){
             holder.linear.setBackgroundResource(R.color.province_background);
         }else{
@@ -68,15 +66,19 @@ public class SchoolListAdapter extends BaseAdapter{
         }
         if(deep == 2){
             holder.textView.setTextColor(mSchoolTextColor);
+            holder.index = (int)map.get("map");
+            holder.map = null;
         }else{
             holder.textView.setTextColor(mNotSchoolColor);
+            holder.map = (Map<String, Object>)map.get("map");
+            holder.index = -1;
         }
-        holder.map = (Map<String, Object>)map.get("map");
         return convertView;
     }
     public class ViewHolder{
         LinearLayout linear;
         TextView textView;
+        public int index;
         public Map<String, Object> map;
     }
 }

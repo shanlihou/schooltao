@@ -2,20 +2,22 @@ package com.shanlihou.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.shanlihou.adapter.SchoolListAdapter;
-import com.shanlihou.schooltao.MainApplication;
 import com.shanlihou.schooltao.R;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import com.shanlihou.tmp.SchoolManager;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -24,23 +26,64 @@ import java.util.*;
 public class SchoolChoiceActivity extends Activity{
     Context mContext;
     ListView mSchoolListView;
-    Map<String, Object> mMap;
     SchoolListAdapter mListAdapter;
+    Runnable mGetSchoolListRun;
+    Handler mHandler;
+    List<Map> mSchoolList;
+    int mScrolly = 0;
+    int mScrollx = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.school_list);
         mSchoolListView = (ListView)findViewById(R.id.school_list);
         mContext = this;
+        /*
         List<Map> list = new ArrayList<>();
         mMap = parseJson(text);
+        Log.d("shanlihou", "map is:" + mMap.toString());
         getList(mMap, list, 0);
         mListAdapter = new SchoolListAdapter(this, list);
-        mSchoolListView.setAdapter(mListAdapter);
+        mSchoolListView.setAdapter(mListAdapter);*/
         init();
     }
     void init(){
+        handleInit();
         viewInit();
+        runInit();
+        new Thread(mGetSchoolListRun).start();
+    }
+    void setList(){
+        mSchoolList = SchoolManager.getInstance().getList();
+        mListAdapter = new SchoolListAdapter(mContext, mSchoolList);
+        mSchoolListView.setAdapter(mListAdapter);
+    }
+    void handleInit(){
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case 0:
+                        setList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+    }
+    void runInit()
+    {
+        mGetSchoolListRun = new Runnable() {
+            @Override
+            public void run() {
+                if (!SchoolManager.getInstance().getMap()){
+                    return;
+                }
+                mHandler.sendEmptyMessage(0);
+            }
+        };
     }
     void viewInit(){
         mSchoolListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,81 +96,34 @@ public class SchoolChoiceActivity extends Activity{
                     }else{
                         holder.map.put("close", null);
                     }
-                    List<Map> list = new ArrayList<Map>();
-                    getList(mMap, list, 0);
-                    mListAdapter = new SchoolListAdapter(mContext, list);
-                    mSchoolListView.setAdapter(mListAdapter);
+                    setList();
+                    mSchoolListView.setSelectionFromTop(mScrollx, mScrolly);
+                }else if(holder.index != -1){
+                    Intent intent = new Intent();
+                    TextView textView = (TextView)view.findViewById(R.id.school_item_text);
+                    intent.putExtra("name", textView.getText().toString());
+                    intent.putExtra("index", holder.index);
+                    SchoolChoiceActivity.this.setResult(0, intent);
+                    SchoolChoiceActivity.this.finish();
                 }
             }
         });
-    }
-
-    private Map<String, Object> parseJson(String jsonStr){
-        JSONTokener jsonTokener = new JSONTokener(jsonStr);
-        JSONObject jsonRet = null;
-        Map<String, Object> map = new HashMap<>();
-        Map<String, Object> province;
-        Map<String, Object> city;
-        try{
-            jsonRet = (JSONObject)jsonTokener.nextValue();
-            if (jsonRet.has("schools")){
-                JSONArray jsonSchools = jsonRet.getJSONArray("schools");
-                int len = jsonSchools.length();
-                for(int i = 0; i < len; i ++){
-                    JSONObject school = (JSONObject)jsonSchools.get(i);
-                    String provinceStr = school.getString("province");
-
-                    if(map.containsKey(provinceStr)){
-                        province = (Map<String, Object>)map.get(provinceStr);
-                        String cityStr = school.getString("city");
-
-                        if(province.containsKey(cityStr)){
-                            city = (Map<String, Object>)province.get(cityStr);
-                            city.put(school.getString("school_name"), null);
-                        }else{
-                            city = new HashMap<>();
-                            city.put("close", 1);
-                            city.put(school.getString("school_name"), null);
-                            province.put(cityStr, city);
-                        }
-                    }else{
-                        province = new HashMap<>();
-                        city = new HashMap<>();
-                        province.put("close", 1);
-                        city.put("close", 1);
-                        city.put(school.getString("school_name"), null);
-                        province.put(school.getString("city"), city);
-                        map.put(provinceStr, province);
-                    }
+        mSchoolListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    // scrollPos记录当前可见的List顶端的一行的位置
+                    mScrollx = mSchoolListView.getFirstVisiblePosition();
                 }
+                if (mSchoolList != null) {
+                    View v = mSchoolListView .getChildAt(0);
+                    mScrolly = (v == null) ? 0 : v.getTop();
+                }
+                Log.d("shanlihou", "x:" + mScrollx + ",y:" + mScrolly);
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return map;
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+        });
     }
-    private void getList(Map<String, Object> map, List<Map> list, int deep){
-        if (map.get("close") != null){
-            return;
-        }
-        Set<Map.Entry<String, Object>> set = map.entrySet();
-        Iterator<Map.Entry<String, Object>> iter = set.iterator();
-        while(iter.hasNext()){
-            Map.Entry<String, Object> entry = iter.next();
-            if (entry.getKey() == "close"){
-                continue;
-            }
-
-            Map<String, Object> tmpMap = new HashMap<>();
-            list.add(tmpMap);
-            tmpMap.put("name", entry.getKey().toString());
-            tmpMap.put("deep", deep);
-            tmpMap.put("map", entry.getValue());
-            Log.d("shanlihou", entry.getKey().toString() + ":" + deep);
-            if (entry.getValue() != null){
-                getList((Map<String, Object>)entry.getValue(), list, deep + 1);
-            }
-        }
-    }
-    String text = "{\"schools\":[{\"city\":\"杭州市\",\"province\":\"浙江省\",\"schoolIndex\":1,\"school_name\":\"杭州电子科技大学\"},{\"city\":\"北京\",\"province\":\"北京\",\"schoolIndex\":2,\"school_name\":\"清华大学\"},{\"city\":\"南京\",\"province\":\"江苏\",\"schoolIndex\":3,\"school_name\":\"南京大学\"},{\"city\":\"南京\",\"province\":\"江苏\",\"schoolIndex\":4,\"school_name\":\"南京理工大学\"},{\"city\":\"南京\",\"province\":\"江苏\",\"schoolIndex\":5,\"school_name\":\"南京理工大学（江北学院）\"},{\"city\":\"杭州\",\"province\":\"浙江\",\"schoolIndex\":6,\"school_name\":\"杭州电子科技大学（信息工程学院）\"},{\"city\":\"宁波\",\"province\":\"浙江\",\"schoolIndex\":7,\"school_name\":\"宁波大学\"},{\"city\":\"温州\",\"province\":\"浙江\",\"schoolIndex\":8,\"school_name\":\"温州大学\"},{\"city\":\"上海\",\"province\":\"上海\",\"schoolIndex\":9,\"school_name\":\"上海交通大学\"},{\"city\":\"剑桥\",\"province\":\"mit\",\"schoolIndex\":10,\"school_name\":\"麻省理工大学\"},{\"city\":\"广州\",\"province\":\"广东\",\"schoolIndex\":11,\"school_name\":\"中山大学\"},{\"city\":\"北京\",\"province\":\"北京\",\"schoolIndex\":12,\"school_name\":\"北京大学\"},{\"city\":\"淮安\",\"province\":\"江苏\",\"schoolIndex\":13,\"school_name\":\"淮安师范学院\"}]}";
 }

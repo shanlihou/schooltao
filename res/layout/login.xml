@@ -4,33 +4,25 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <LinearLayout android:layout_width="match_parent"
-                  android:background="@color/title_color"
-                  android:orientation="horizontal"
-                  android:layout_height="96px">
-        <ImageView android:layout_width="wrap_content"
-                   android:src="@drawable/btn_return"
-                   android:layout_marginLeft="30px"
-                   android:layout_gravity="center"
-                   android:id="@+id/btn_return"
-                   android:layout_height="wrap_content"/>
-        <TextView android:layout_width="wrap_content"
-                  android:layout_gravity="center"
-                  android:layout_marginLeft="20px"
-                  android:text="@string/log_in"
-                  android:textColor="@color/white"
-                  android:textSize="26px"
-                  android:layout_height="wrap_content"/>
-    </LinearLayout>
+    <TextView android:layout_width="match_parent"
+              android:gravity="center"
+              android:text="@string/log_in"
+              android:textColor="@color/white"
+              android:textSize="26px"
+              android:background="@color/title_color"
+              android:layout_height="96px"/>
     <LinearLayout android:layout_width="match_parent"
                   android:background="@color/white"
                   android:orientation="vertical"
                   android:layout_marginTop="30px"
                   android:layout_height="wrap_content">
         <EditText style="@style/commonEdit"
+                  android:id="@+id/et_cellphone"
                   android:hint="@string/cellphone_number"/>
         <ImageView style="@style/divideLine"/>
         <EditText style="@style/commonEdit"
+                  android:password="true"
+                  android:id="@+id/et_password"
                   android:hint="@string/password"/>
     </LinearLayout>
 
@@ -39,5 +31,24 @@
             android:layout_marginTop="40px"
             android:id="@+id/bt_login"
             />
-
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_marginTop="30px"
+                  android:layout_marginRight="40px"
+                  android:layout_marginLeft="40px"
+                  android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content"
+                  android:textSize="26px"
+                  android:id="@+id/bt_register"
+                  android:text="@string/regist"
+                  android:textColor="@color/red_light"
+                  android:layout_height="wrap_content"/>
+        <LinearLayout android:layout_width="0px"
+                      android:layout_weight="1"
+                      android:layout_height="match_parent"/>
+        <TextView android:layout_width="wrap_content"
+                  android:textSize="26px"
+                  android:text="@string/forget_passwd"
+                  android:textColor="@color/red_light"
+                  android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>

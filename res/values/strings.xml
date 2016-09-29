@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">schooltao</string>
+    <string name="username">用户名</string>
     <string name="log_in">登陆</string>
     <string name="regist">注册</string>
     <string name="school">学校</string>
@@ -10,4 +11,6 @@
     <string name="password">密码</string>
     <string name="school_choice">学校选择</string>
     <string name="shopping_car">购物车</string>
+    <string name="forget_passwd">忘记密码</string>
+    <string name="building_choice">选择楼号</string>
 </resources>

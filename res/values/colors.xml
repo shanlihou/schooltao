@@ -7,6 +7,6 @@
     <color name="divide_line">#dfdfdf</color>
     <color name="red_light">#f45859</color>
     <color name="province_background">#dadada</color>
-    <color name="province_text">#2b2b2b</color>
+    <color name="common_text">#2b2b2b</color>
     <color name="school_text">#8d8d8d</color>
 </resources>

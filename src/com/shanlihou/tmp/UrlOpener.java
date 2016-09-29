@@ -184,7 +184,9 @@ public class UrlOpener {
             URL url = new URL(strUrl);
             Map<String, String> newMap = new HashMap<String, String>();
             newMap.putAll(this.map);
-            newMap.putAll(map);
+            if (map != null){
+                newMap.putAll(map);
+            }
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 //            urlConn.setSSLSocketFactory(sslcontext.getSocketFactory());
             urlConn.setRequestMethod("POST");

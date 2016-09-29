@@ -3,8 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:id="@+id/school_item_linear"
-              android:layout_height="82px">
+              android:layout_height="match_parent">
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginTop="28px"
@@ -12,7 +11,6 @@
               android:textSize="26px"
               android:textColor="@color/common_text"
               android:layout_marginLeft="40px"
-              android:id="@+id/school_item_text"
+              android:id="@+id/building_item_text"
             />
-
 </LinearLayout>
